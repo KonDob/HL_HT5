@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
+from random import randint
 from homepage.models import Student
 
 
@@ -25,6 +26,13 @@ class Command(BaseCommand):
         for _ in range(options['am']):
             self.stdout.write('Start inserting Students')
             student = Student()
-            student.name = faker.name()
+            student.name = faker.first_name()
+            student.surname = faker.last_name()
+            student.age = randint(20,40)
+            student.sex = faker.simple_profile()['sex']
+            student.address = faker.address()
+            student.description = faker.text()
+            student.birthday = faker.date_of_birth()
+            student.email = faker.email()
             student.save()
         self.stdout.write('End inserting Students')

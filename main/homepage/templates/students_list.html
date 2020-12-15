@@ -1,4 +1,9 @@
-{% for student in students %}
-    {{ student.id }} 
-    {{ student.name }} </br>
-{% endfor %}
+{% extends "base.html" %}
+
+
+{% block body %}
+    {% for student in students %}
+        {{ student.id }} 
+        {{ student.name }} </br>
+    {% endfor %}
+{% endblock %}
