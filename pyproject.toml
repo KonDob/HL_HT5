@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "ht_5"
+version = "0.1.0"
+description = "testing poetry"
+authors = ["KonDob <konstantin.dobro@gmail.com>"]
+license = "n"
+
+[tool.poetry.dependencies]
+python = "y"
+Y-Rip = "^2.0.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
