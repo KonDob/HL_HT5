@@ -23,7 +23,7 @@ def create_student_by_form(request):
 
     if request.method == 'POST':
         student_form = StudentForm(request.POST)
-        if student_form.is_valid():         
+        if student_form.is_valid():
             student_form.save()
             return redirect('homepage:students_list')
 
@@ -31,4 +31,3 @@ def create_student_by_form(request):
         form = StudentForm()
         context = {'form': form}
         return render(request, 'student_form.html', context=context)
-
