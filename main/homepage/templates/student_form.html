@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+<form action="{% url 'homepage:create_student' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value='Create'>
+</form>
+
+
+{% endblock %}
