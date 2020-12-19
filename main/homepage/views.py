@@ -31,3 +31,24 @@ def create_student_by_form(request):
         form = StudentForm()
         context = {'form': form}
         return render(request, 'student_form.html', context=context)
+
+def edit_student(request, id):
+    if request.method == 'GET':
+        student = Student.objects.get(id=id)
+        student_form = StudentForm(instance=student)
+        context = {
+                'form': student_form,
+                'id' : id,
+        }
+        return render(request, 'edit_student.html', context=context)
+    elif request.method == 'POST':
+        student = Student.objects.get(id=id)
+        student_form = StudentForm(request.POST, instance=student)
+        if student_form.is_valid():
+            student_form.save()
+        else:
+            print('not valid something')
+        return redirect('homepage:students_list')
+
+
+        
