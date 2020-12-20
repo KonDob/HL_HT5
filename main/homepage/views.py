@@ -1,54 +1,72 @@
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.views.generic.base import View
 
 from .forms import StudentForm
 from .models import Student
 
 
-def home(request):
-    """
-    Return html page
-    """
-    return render(request, 'home.html')
+class HomePageView(View):
+
+    template_name = 'home.html'
+
+    def get(self, request):
+        """
+        Return html page
+        """
+        return render(request, self.template_name)
 
 
-def student_list(request):
-    students = Student.objects.all()
-    return render(request, 'students_list.html', {'students': students})
+class StudentListView(View):
+
+    template_name = 'students_list.html'
+
+    def get(self, request):
+        students = Student.objects.all()
+        return render(request, self.template_name, {'students': students})
 
 
-def create_student_by_form(request):
+class CreateStudentView(View):
     """
     Create student by Django Forms
     """
 
-    if request.method == 'POST':
+    template_name = 'homepage:student_form'
+
+    def get(self, request):
+        form = StudentForm()
+        context = {'form': form}
+        return render(request, self.template_name, context=context)
+
+    def post(self, request):
         student_form = StudentForm(request.POST)
         if student_form.is_valid():
             student_form.save()
             return redirect('homepage:students_list')
+        else:
+            messages.add_message(request, 'Your form of student creation isn`t \
+                                 valid')
+            return self.get(request, id)
 
-    elif request.method == 'GET':
-        form = StudentForm()
-        context = {'form': form}
-        return render(request, 'student_form.html', context=context)
 
-def edit_student(request, id):
-    if request.method == 'GET':
+class EditStudentView(View):
+
+    def get(self, request, id):
         student = Student.objects.get(id=id)
         student_form = StudentForm(instance=student)
         context = {
-                'form': student_form,
-                'id' : id,
+            'form': student_form,
+            'id': id,
         }
         return render(request, 'edit_student.html', context=context)
-    elif request.method == 'POST':
+
+    def post(self, request, id):
         student = Student.objects.get(id=id)
         student_form = StudentForm(request.POST, instance=student)
         if student_form.is_valid():
             student_form.save()
+            return redirect('homepage:students_list')
         else:
-            print('not valid something')
-        return redirect('homepage:students_list')
-
-
-        
+            messages.add_message(request, messages.INFO,
+                                 'You trying edit student with invalid data')
+            return self.get(request, id)
