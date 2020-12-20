@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-
 {% block body %}
-<form action="{% url 'homepage:create_student' %}" method="POST" enctype="multipart/form-data">
+
+<form action="{% url 'homepage:edit_student' id=id %}" method="POST">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value='Create'>
+    <input type="submit" value="Edit">
 </form>
 {% if messages %}
 <ul class="messages">
@@ -16,3 +16,4 @@
 {% endif %}
 
 {% endblock %}
+

@@ -2,8 +2,14 @@
 
 
 {% block body %}
+<ul>
     {% for student in students %}
+    <li>
+        <a href="{% url 'homepage:edit_student' id=student.id %}">
         {{ student.id }} 
-        {{ student.name }} </br>
+        {{ student.name }}
+        {{ student.social_url }} </br>
+    </li>
     {% endfor %}
+</ul>
 {% endblock %}
