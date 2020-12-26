@@ -2,11 +2,23 @@
 
 
 {% block body %}
-<form action="{% url 'homepage:create_student' %}" method="POST" enctype="multipart/form-data">
+<div class='container'>
+
+<form class="row g-3 align-items-center" action="{% url 'homepage:create_student' %}" method="POST">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value='Create'>
+
+    {% for field in form.visible_fields %}
+    <div class="form-control-sm">
+        {{ field.label_tag }}
+        {{ field }}
+    </div>
+    {% endfor %}
+    <div class="col-10">
+        <input class="btn btn-primary" type="submit" value="Create">
+    </div>
 </form>
+</div>
+
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

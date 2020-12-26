@@ -1,13 +1,12 @@
 {% extends "base.html" %}
-{% load static %}
 
 
 {% block body %}
-
-<body>
-    <h1>Hello World!</h1>
-    <a href="{% url 'homepage:students_list' %}">Students list</a>
-    <a href="{% url 'homepage:create_student' %}">Create student</a>
-</body>
-
+<div class='container'>
+    <h1>Welcome to students site</h1>
+    <div class="row row-cols-1">
+        <a class="col" href="{% url 'homepage:students_list' %}">Students list</a>
+        <a class="col" href="{% url 'homepage:create_student' %}">Create student</a>
+    </div>
+</div>
 {% endblock %}

@@ -12,10 +12,9 @@ class Student(models.Model):
     description = models.TextField(max_length=100)
     birthday = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
-    is_active = models.CharField(max_length=100, null=True)
-    normilized_name = models.CharField(max_length=100, null=True)
 
-    student = models.ForeignKey('homepage.Subject', on_delete=models.SET_NULL, null=True)
+    student = models.ForeignKey('homepage.Subject', on_delete=models.SET_NULL,
+                                null=True)
 
 
 class Subject(models.Model):
