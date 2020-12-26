@@ -2,11 +2,6 @@
 
 {% block body %}
 
-<form action="{% url 'homepage:edit_student' id=id %}" method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Edit">
-</form>
 {% if messages %}
 <ul class="messages">
     {% for message in messages %}

@@ -31,7 +31,7 @@ class CreateStudentView(View):
     Create student by Django Forms
     """
 
-    template_name = 'homepage:student_form'
+    template_name = 'student_form.html'
 
     def get(self, request):
         form = StudentForm()
