@@ -2,14 +2,34 @@
 
 
 {% block body %}
-<ul>
-    {% for student in students %}
-    <li>
-        <a href="{% url 'homepage:edit_student' id=student.id %}">
-        {{ student.id }} 
-        {{ student.name }}
-        {{ student.social_url }} </br>
-    </li>
-    {% endfor %}
-</ul>
+<div class="album py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            {% for student in students %}
+
+            <div class="col-md-3">
+                <div class="card mb-4 box-shadow">
+                    <img class="card-img-top"
+                        data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Student id {{ student.id }}">
+                    <div class="card-body">
+                        <p class="card-text">
+                            {{ student.name }}
+                            {{ student.surname }}
+                            {% if student.social_url %}
+                                {{ student.social_url }}
+                            {% endif %}
+                        </p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                                <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'homepage:edit_student' id=student.id %}">Edit</a>                            </div>
+                            <small class="text-muted">9 mins</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}

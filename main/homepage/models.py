@@ -12,3 +12,11 @@ class Student(models.Model):
     description = models.TextField(max_length=100)
     birthday = models.CharField(max_length=100)
     email = models.CharField(max_length=100)
+
+    student = models.ForeignKey('homepage.Subject', on_delete=models.SET_NULL,
+                                null=True)
+
+
+class Subject(models.Model):
+    id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=200)

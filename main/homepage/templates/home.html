@@ -1,16 +1,12 @@
-{% load static %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Page</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
-</head>
-<body>
-    <h1>Hello World!</h1>
-    <a href="{% url 'homepage:students_list' %}">Students list</a>
-    <a href="{% url 'homepage:create_student' %}">Create student</a>
-</body>
-</html>
+
+{% block body %}
+<div class='container'>
+    <h1>Welcome to students site</h1>
+    <div class="row row-cols-1">
+        <a class="col" href="{% url 'homepage:students_list' %}">Students list</a>
+        <a class="col" href="{% url 'homepage:create_student' %}">Create student</a>
+    </div>
+</div>
+{% endblock %}
