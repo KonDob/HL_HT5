@@ -9,6 +9,7 @@ python = "^3.8"
 Faker = "^5.0.2"
 flake8 = "^3.8.4"
 Django = "^3.1.4"
+gender-guesser = "^0.4.0"
 
 [tool.poetry.dev-dependencies]
 
