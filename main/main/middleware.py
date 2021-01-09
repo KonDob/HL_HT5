@@ -1,22 +1,21 @@
-from django.utils.deprecation import MiddlewareMixin
 from uuid import uuid4
-# from django.http import get_response
+
+from django.utils.deprecation import MiddlewareMixin
+
 
 class LogMiddleware(MiddlewareMixin):
     """ Class for logging requests and response
     at application terminal
     """
 
-    def __init__(self, get_response):
-        self.get_response = get_response
+    def process_request(self, request):
+        req = "Request is " + str(request)
+        print(req)
 
-    def __call__(self, request):
-        response = self.get_response(request)
+    def process_response(self, request, response):
+        res = "Response is " + str(response)
+        print(res)
         return response
-
-    def process_view(self, request, view_func, view_args, view_kwargs):
-        print(request)
-        return view_func(request, *view_args, **view_kwargs)
 
 
 class RawDataMiddleware(MiddlewareMixin):
@@ -25,14 +24,12 @@ class RawDataMiddleware(MiddlewareMixin):
     """
     def process_request(self, request):
         request.META['id'] = uuid4()
-        return view_func(request, *view_args, **view_kwargs)
-
 
 
 class IdentifyResponseMiddleware(MiddlewareMixin):
     """ Identify response via adding hash
         to meta info for each response.
     """
-    def process_template_response(request, response):
-        response.META['id'] = uuid4()
-        return view_func(request, *view_args, **view_kwargs)
+    def process_response(self, request, response):
+        response['id'] = uuid4()
+        return response

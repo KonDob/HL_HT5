@@ -1,14 +1,14 @@
 from django.db.models.signals import pre_delete, pre_save
-from homepage.models import Student
-
 from django.dispatch import receiver
+
 import gender_guesser.detector as gender
+from homepage.models import Student
 
 d = gender.Detector()
 
+
 @receiver(pre_save, sender=Student)
 def normalized_name(sender, instance, **kwargs):
-    print('bring me something')
     instance.normalized_name = instance.name.lower()
 
 
