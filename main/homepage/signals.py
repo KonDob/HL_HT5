@@ -4,7 +4,7 @@ from django.dispatch import receiver
 import gender_guesser.detector as gender
 from homepage.models import Student
 
-d = gender.Detector()
+detector = gender.Detector()
 
 
 @receiver(pre_save, sender=Student)
@@ -14,7 +14,7 @@ def normalized_name(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=Student)
 def gendering_student(sender, instance, **kwargs):
-    if d.get_gender(instance.name.split(' ')[0]) == 'male':
+    if detector.get_gender(instance.name.split(' ')[0]) == 'male':
         instance.sex = 'M'
     else:
         instance.sex = 'F'

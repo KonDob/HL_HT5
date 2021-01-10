@@ -1,4 +1,5 @@
 from uuid import uuid4
+import logging
 
 from django.utils.deprecation import MiddlewareMixin
 
@@ -9,12 +10,12 @@ class LogMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        req = "Request is " + str(request)
-        print(req)
+        log_request = "Request is " + str(request)
+        logging.warning(log_request)
 
     def process_response(self, request, response):
-        res = "Response is " + str(response)
-        print(res)
+        log_response = "Response is " + str(response)
+        logging.warning(log_response)
         return response
 
 
@@ -24,6 +25,7 @@ class RawDataMiddleware(MiddlewareMixin):
     """
     def process_request(self, request):
         request.META['id'] = uuid4()
+        logging.warning(request.META['id'])
 
 
 class IdentifyResponseMiddleware(MiddlewareMixin):
