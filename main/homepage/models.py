@@ -17,8 +17,21 @@ class Student(models.Model):
 
     subject = models.ForeignKey('homepage.Subject', on_delete=models.SET_NULL,
                                 null=True)
+    book = models.OneToOneField('homepage.Book', on_delete=models.CASCADE,
+                                null=True)
 
 
 class Subject(models.Model):
     id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=200)
+
+
+class Book(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+
+
+class Teacher(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=200)
+    students = models.ManyToManyField('homepage.Student')
