@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.views.generic.base import View
 
 from .forms import StudentForm
-from .models import Student
+from .models import Student, Book
 
 
 class HomePageView(View):
@@ -70,3 +70,18 @@ class EditStudentView(View):
             messages.add_message(request, messages.INFO,
                                  'You trying edit student with invalid data')
             return self.get(request, id)
+
+
+class BooksView(View):
+    """
+        Page to see all books and additional info about books owner
+    """
+
+    def get(self, request):
+
+        books = Book.objects.all()
+
+        context = {
+            'books': books
+        }
+        return render(request, 'books_view.html', context=context)
