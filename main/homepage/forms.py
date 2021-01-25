@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from .models import Student
+from .models import Student, Book
 
 
 class StudentForm(ModelForm):
@@ -9,3 +9,9 @@ class StudentForm(ModelForm):
         model = Student
         fields = ['name', 'surname', 'normalized_name', 'social_url', 'age',
                   'sex', 'address', 'birthday', 'email', 'description']
+
+class BookForm(ModelForm):
+
+    class Meta:
+        model = Book
+        fields = ['name']

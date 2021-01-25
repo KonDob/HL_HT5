@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views.generic.base import View
+from django.views.generic.list import ListView
+from django.views.generic.edit import *
 
-from .forms import StudentForm
-from .models import Student, Book
+from .forms import StudentForm, BookForm
+from .models import Student, Book, Subject, Teacher
 
 
 class HomePageView(View):
@@ -82,6 +84,86 @@ class BooksView(View):
         books = Book.objects.all()
 
         context = {
-            'books': books
-        }
+            'books': books,
+            }
         return render(request, 'books_view.html', context=context)
+
+
+class EditBook(View):
+
+    def get(self, request, id):
+        book = Book.objects.get(id=id)
+        book_form = BookForm(instance=book)
+        context = {
+            'form': book_form,
+            'id': id,
+        }
+        return render(request, 'edit_book.html', context=context)
+
+    def put(self,request, id):
+        book = Book.objects.get(id=id)
+        book_form = BookForm(instance=book)
+        if book_form.is_valid():
+            book_form.save()
+            return redirect('homepage:books')
+        else:
+            messages.add_message(request, messages.INFO,
+                                 'You trying edit books with invalid data')
+            return self.get(request, id)
+
+    def delete(self, request, id):
+        id = int(id)
+        book = Book.objects.get(id=id)
+        book_form = BookForm(instance=book)
+        try:
+            book_form.delete()
+            return redirect('homepage:books')
+        except:
+          messages.add_message(request, messages.INFO,
+                                 'You trying edit books with invalid data')
+
+class DeleteBook(DeleteView):
+
+    model = Book
+    fields = ['name']
+    template_name = 'edit_book.html'
+
+
+class SubjectView(ListView):
+
+    """
+        Page to see all subjects and additional info about subjects owner
+    """
+    model = Subject
+
+    template_name = 'subjects.html'
+
+    # def get(self, request):
+
+    #     subjects = self.model.objects.all()
+
+    #     context = {
+    #         'subjects': subjects
+    #     }
+    #     return render(request, 'subjects.html', context=context)
+
+
+class TeachersView(ListView):
+    """[summary]
+
+    Args:
+        View ([type]): [description]
+    """
+    model = Teacher
+
+    template_name = 'teachers.html'
+
+    # def get(self, request):
+
+    #     teachers = self.model.objects.all()
+    
+    #     context = {
+    #         'teachers': teachers
+    #     }
+    #     return render(request, 'teachers.html', context=context)
+
