@@ -11,5 +11,9 @@ urlpatterns = [
     path('create_student/', views.CreateStudentView.as_view(),
          name='create_student'),
     path('edit_student/<id>', views.EditStudentView.as_view(),
-         name='edit_student')
+         name='edit_student'),
+    path('json_students_list', views.JsonStudentView.as_view(),
+         name='json_students_list'),
+    path('csv_students_list', views.CSVStudentView.as_view(),
+         name='csv_students_list'),
 ]
