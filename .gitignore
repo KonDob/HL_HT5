@@ -3,4 +3,5 @@ __pycache__
 .vscode
 migrations/
 media
+.idea/
 db.sqlite3
