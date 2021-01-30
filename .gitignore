@@ -1,6 +1,7 @@
 venv/
 __pycache__
-.vscode
+.vscode/
+.idea/
 migrations/
 media
 db.sqlite3

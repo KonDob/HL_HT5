@@ -161,7 +161,7 @@ class TeachersView(ListView):
     # def get(self, request):
 
     #     teachers = self.model.objects.all()
-    
+
     #     context = {
     #         'teachers': teachers
     #     }
