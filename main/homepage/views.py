@@ -1,4 +1,6 @@
+import csv
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.views.generic.base import View
 
@@ -70,3 +72,28 @@ class EditStudentView(View):
             messages.add_message(request, messages.INFO,
                                  'You trying edit student with invalid data')
             return self.get(request, id)
+
+
+class JsonStudentView(View):
+
+    def get(self, request):
+        students = list(Student.objects.all().values())
+        return JsonResponse(students, safe=False)
+
+
+class CSVStudentView(View):
+
+    def get(self, request):
+        response = HttpResponse(content_type="text/csv")
+        response['Content-Disposition'] = "attachment; \
+                filename=students_list.csv"
+        writer = csv.writer(response)
+        writer.writerow(["Name", "Book", "Subject"])
+        students = Student.objects.all()
+        for student in students:
+            writer.writerow([
+                student.name,
+                student.book.name if student.book else None,
+                student.subject.title if student.subject else None,
+            ])
+        return response
