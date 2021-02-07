@@ -35,3 +35,9 @@ class Teacher(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=200)
     students = models.ManyToManyField('homepage.Student')
+
+
+class Currency(models.Model):
+    id = models.AutoField(primary_key=True)
+    content = models.CharField(max_length=999)
+    data = models.DateTimeField(auto_now_add=True, blank=True)
