@@ -1,15 +1,18 @@
 import csv
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
+from django.core.cache import cache
 from django.shortcuts import redirect, render
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic.base import View
+from django.conf import settings
 
 from .forms import StudentForm
 from .models import Student
 
 
 class HomePageView(View):
-
     template_name = 'home.html'
 
     def get(self, request):
@@ -19,12 +22,21 @@ class HomePageView(View):
         return render(request, self.template_name)
 
 
+@method_decorator(cache_page(settings.CACHE_TTL), name='dispatch')
 class StudentListView(View):
 
     template_name = 'students_list.html'
 
     def get(self, request):
+        """
+        Show all students in template
+        """
+
         students = Student.objects.all()
+        cache_value = cache.get('student_list')
+        if not cache_value:
+            cache.set('student_list', students)
+
         return render(request, self.template_name, {'students': students})
 
 
