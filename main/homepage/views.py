@@ -10,6 +10,7 @@ from django.conf import settings
 
 from .forms import StudentForm
 from .models import Student
+from .emails import send_email
 
 
 class HomePageView(View):
@@ -109,3 +110,14 @@ class CSVStudentView(View):
                 student.subject.title if student.subject else None,
             ])
         return response
+
+
+class SendMailView(View):
+
+    def get(self, request):
+        recipients = ['konstantin.dobro@gmail.com']
+        send_email(title='123 title', description=' Just description',
+                   recipients=recipients)
+
+        return HttpResponse(f"Your message sent to {recipients}".
+                            format(*recipients))
