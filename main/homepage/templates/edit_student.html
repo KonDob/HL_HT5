@@ -5,15 +5,15 @@
 
 
 
-<form class="row g-3 align-items-center" action="{% url 'homepage:edit_student' id=id %}" method="POST">
+<form class="row g-3 align-items-center" action="{% url 'homepage:edit_student' pk=student.id %}" method="POST">
     {% csrf_token %}
 
-    {% for field in form.visible_fields %}
-    <div class="form-control-sm">
-        {{ field.label_tag }}
-        {{ field }}
-    </div>
-    {% endfor %}
+        {% for field in form.visible_fields %}
+        <div class="form-control-sm">
+            {{ field.label_tag }}
+            {{ field }}
+        </div>
+        {% endfor %}
     <div class="col-10">
         <input class="btn btn-primary" type="submit" value="Edit">
     </div>
