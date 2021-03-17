@@ -1,4 +1,4 @@
-from django.db.models.signals import pre_delete, pre_save
+from django.db.models.signals import pre_delete, pre_save # noqa
 from django.dispatch import receiver
 
 import gender_guesser.detector as gender

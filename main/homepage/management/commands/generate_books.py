@@ -10,7 +10,6 @@ class Command(BaseCommand):
 
     books = ['Zach0tka', 'za4etko', 'zachechotko', 'zaCHETKO', 'zacheton']
 
-
     """
         Help command that generate books for each student and them to DB
         You can set amount of student to generate using argument
@@ -18,7 +17,6 @@ class Command(BaseCommand):
     """
 
     help = 'Generate books for all student(s) to the DB using Faker'
-
 
     def handle(self, *args, **options):
 
@@ -29,6 +27,6 @@ class Command(BaseCommand):
         for student in students:
             self.stdout.write('Start write book to students')
             a = faker.sentence(ext_word_list=self.books, nb_words=1)
-            student.book = Book.objects.create(name = a)
+            student.book = Book.objects.create(name=a)
             student.save()
             self.stdout.write('End write book to students')

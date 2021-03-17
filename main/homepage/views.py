@@ -3,7 +3,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import DetailView
 from django.views.generic.base import View
 from django.views.generic.list import ListView
-from django.views.generic.edit import *
+from django.views.generic.edit import * # noqa
 
 from .forms import StudentForm, BookForm, SubjectForm, TeacherForm
 from .models import Student, Book, Subject, Teacher
@@ -27,7 +27,6 @@ class StudentListView(View):
         return render(request, self.template_name, {'students': students})
 
     def post(self, request):  # noqa
-        template_name = 'students_list.html'
         if request.POST.get('filter_by', '') == 'filter_by_teacher':
 
             students = Student.objects.filter(
@@ -132,8 +131,6 @@ class EditBook(View):
     def post(self, request, id):  # noqa
         book = Book.objects.get(id=id)
         book.delete()
-        context = {'book': book,
-                   'book_id': book.id}
         return redirect('homepage:books')
 
     def put(self, request, id):  # noqa
@@ -234,7 +231,8 @@ class TeacherDetailView(View):
                    'teacher': teacher,
                    'teachers_students': teachers_students,
                    'new_students': new_students}
-        return render(request, template_name=self.template_name, context=context)
+        return render(request, template_name=self.template_name,
+                      context=context)
 
     def post(self, request, id):  # noqa
         if 'edit' in request.POST:
