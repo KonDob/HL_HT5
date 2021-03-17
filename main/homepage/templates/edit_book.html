@@ -2,35 +2,27 @@
 
 {% block body %}
 
-
 <div class="album py-5 bg-light">
     <div class='container'>
-        <form class="row g-3 align-items-center" action="{% url 'homepage:update_book' id=id %}" method="PUT">{% csrf_token %}
+        <form class="row g-3 align-items-center" action="{% url 'homepage:update_book' id=id %}" method="PUT">
+            {% csrf_token %}
             {% for field in form.visible_fields %}
             <div class="form-control-sm">
                 {{ field.label_tag }}
                 {{ field }}
-            </div>
-            {% endfor %}
-            <div class="col-10">
-                <input class="btn btn-primary" type="submit" value="Edit">
+                {% endfor %}
+                <div class="col-10">
+                    <input class="btn btn-primary" type="submit" value="Edit">
+                </div>
             </div>
         </form>
-        <form class="row g-3 align-items-center" action="{% url 'homepage:delete_book' id=id %}" method="DELETE">{% csrf_token %}
-
+        <form class="row g-3 align-items-center" action="{% url 'homepage:delete_book' id=id %}" method="POST">
+            {% csrf_token %}
             <div class="col-10">
                 <input class="btn btn-primary" type="submit" value="Remove">
             </div>
         </form>
-        </div>
-
-
-{% if messages %}
-<ul class="messages">
-    {% for message in messages %}
-    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-        {% endfor %}
-</ul>
-{% endif %}
+    </div>
+</div>
 
 {% endblock %}

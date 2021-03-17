@@ -19,7 +19,7 @@ def gendering_student(sender, instance, **kwargs):
     else:
         instance.sex = 'F'
 
-
-@receiver(pre_delete, sender=Student)
-def deny_removing(sender, instance, **kwargs):
-    raise NameError('Don`t delete it')
+#
+# @receiver(pre_delete, sender=Student)
+# def deny_removing(sender, instance, **kwargs):
+#     raise NameError('Don`t delete it')

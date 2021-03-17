@@ -11,8 +11,7 @@
             <div class="row">
                 {% for subject in object_list %}
                 <div class="form-control-sm">
-                    {{ subject.title }}
-                    {{ subject.id }}
+                    <a type="button" href="{% url 'homepage:subject_info' id=subject.id %}">Subject : {{ subject.title }} {{ subject.id }} with related students :</a>
                 </div>
                 {% endfor %}
             </div>
