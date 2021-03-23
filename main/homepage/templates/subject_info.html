@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+<div class="album py-5 bg-light">
+
+    <div class='container'>
+
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                <div class="form-control-sm">
+                    {{ subject_id }}
+                    {{ subject_title }}
+                    <p>List of students:</p>
+                    {% for student in subject_student %}
+                    <ol>
+                        {{student.name}} {{student.surname}}
+                    </ol>
+                    {% endfor %}
+                </div>
+                <div class="form-control-sm">
+                    <form action="{% url 'homepage:edit_subject_name' id=subject_id %}" method="POST">
+                        {% csrf_token %}
+                        <p>
+                            {{ form_subject }}
+                        </p>
+                        <p><input type="submit" value="Edit"></p>
+                    </form>
+                </div>
+                <div class="form-control-sm">
+                    <form action="{% url 'homepage:add_student' id=subject_id %}" method="POST">
+                        {% csrf_token %}
+                        <p>
+                            Add students to {{ subject_title }} subject <br>
+                            <select name="add">
+                                {% for student in new_student %}
+                                <option selected value="{{student.id}}">{{student.name}} {{student.surname}}</option>
+                                {% endfor %}
+                            </select>
+                        </p>
+                        <p><input type="submit" value="Add"></p>
+                    </form>
+                </div>
+                <div class="form-control-sm">
+                    <form action="{% url 'homepage:delete_subject' id=subject_id %}" method="POST">
+                        {% csrf_token %}
+                        Delete student from the {{ subject_title }} subject <br>
+                        <p><select name="delete">
+                            {% for student in subject_student %}
+                            <option selected value="{{student.id}}">{{student.name}} {{student.surname}}</option>
+                            {% endfor %}
+                        </select></p>
+                        <p><input type="submit" value="Delete"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

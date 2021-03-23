@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="album py-5 bg-light">
+    <div class='container'>
+        {% csrf_token %}
+        <div class="container">
+            <div class="row">
+                {% for book in books %}
+                <div class="col-lg-4">
+                    <a type="button" href="{% url 'homepage:edit_book' id=book.id %}">Student : {{ book.student.name }} with book <b>{{ book.name }}</b></a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
