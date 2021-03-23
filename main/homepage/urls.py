@@ -35,4 +35,9 @@ urlpatterns = [
          name='add_student'),
     path('teacher/<id>', views.TeacherDetailView.as_view(),
          name='edit_teachers_name'),
+    
+    path('json_students_list', views.JsonStudentView.as_view(),
+         name='json_students_list'),
+    path('csv_students_list', views.CSVStudentView.as_view(),
+         name='csv_students_list'),
 ]

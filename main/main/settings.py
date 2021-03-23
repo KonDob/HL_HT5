@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from celery.schedules import crontab
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -84,6 +86,15 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default':{
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1'
+    }
+}
+
+CACHE_TTL = 60 * 15
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -128,4 +139,10 @@ STATICFILES_DIRS = (
 )
 
 CELERY_BROKER_URL = 'amqp://localhost'
-CELERY_RESULT_BACKEND = 'rpc://localhost'
+CELERY_RESULT_BACKEND = 'db+sqlite:///celery_results.sqlite3'
+CELERY_BEAT_SCHEDULE = {
+    'parse_private_api': {
+        'task': 'homepage.tasks.common_task',
+        'schedule': crontab('0', '9, 18', '*', '*', '*')
+    }
+}

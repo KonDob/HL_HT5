@@ -1,9 +1,16 @@
+import csv
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
+from django.core.cache import cache
 from django.shortcuts import redirect, render
+
 from django.views.generic import DetailView
 from django.views.generic.base import View
 from django.views.generic.list import ListView
 from django.views.generic.edit import * # noqa
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.conf import settings
 
 from .forms import StudentForm, BookForm, SubjectForm, TeacherForm
 from .models import Student, Book, Subject, Teacher
@@ -19,11 +26,20 @@ class HomePageView(View):
         return render(request, self.template_name)
 
 
+@method_decorator(cache_page(settings.CACHE_TTL), name='dispatch')
 class StudentListView(View):
     template_name = 'students_list.html'
 
     def get(self, request):
+        """
+        Show all students in template
+        """
+
         students = Student.objects.all()
+        cache_value = cache.get('student_list')
+        if not cache_value:
+            cache.set('student_list', students)
+
         return render(request, self.template_name, {'students': students})
 
     def post(self, request):  # noqa
@@ -156,15 +172,6 @@ class SubjectsView(ListView):
 
     template_name = 'subjects.html'
 
-    # def get(self, request):
-
-    #     subjects = self.model.objects.all()
-
-    #     context = {
-    #         'subjects': subjects
-    #     }
-    #     return render(request, 'subjects.html', context=context)
-
 
 class SubjectInfoView(DetailView):
     """
@@ -253,3 +260,28 @@ class TeacherDetailView(View):
             teacher.student.remove(student)
 
         return redirect('homepage:teachers')
+
+
+class JsonStudentView(View):
+
+    def get(self, request):
+        students = list(Student.objects.all().values())
+        return JsonResponse(students, safe=False)
+
+
+class CSVStudentView(View):
+
+    def get(self, request):
+        response = HttpResponse(content_type="text/csv")
+        response['Content-Disposition'] = "attachment; \
+                filename=students_list.csv"
+        writer = csv.writer(response)
+        writer.writerow(["Name", "Book", "Subject"])
+        students = Student.objects.all()
+        for student in students:
+            writer.writerow([
+                student.name,
+                student.book.name if student.book else None,
+                student.subject.title if student.subject else None,
+            ])
+        return response
