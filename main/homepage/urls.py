@@ -1,6 +1,7 @@
 from django.urls import path
 
 from . import views
+from .views import SignUpView, ActivateView, SignOutView, SignInView
 
 app_name = 'homepage'
 
@@ -40,4 +41,8 @@ urlpatterns = [
          name='json_students_list'),
     path('csv_students_list', views.CSVStudentView.as_view(),
          name='csv_students_list'),
+    path('sign_up', SignUpView.as_view(), name='sign_up_view'),
+    path('sign_out', SignOutView.as_view(), name='sign_out_view'),
+    path('login', SignInView.as_view(), name='login'),
+    path('activate/<uid>/<token>', ActivateView.as_view(), name='sign_up_view'),
 ]
