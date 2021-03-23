@@ -4,25 +4,39 @@
 {% block body %}
 <div class="album py-5 bg-light">
     <div class="container">
+        <form method="POST" action="{% url 'homepage:students_list'%}">
+            {% csrf_token %}
+            <p> Choose filter for students:
+                <select name="filter_by">
+                    <option selected value="filter_by_teacher">Teacher</option>
+                    <option selected value="filter_by_subject">Subject</option>
+                    <option selected value="filter_by_book">Book</option>
+                </select>
+            <p>
+                <input maxlength="50" size="20" onfocus="this.value=''" name="text_form">
+            </p>
+            </p>
+            <p><input type="submit" value="Show by filter" name="filter_button"></p>
+        </form>
         <div class="row">
             {% for student in students %}
-
             <div class="col-md-3">
                 <div class="card mb-4 box-shadow">
                     <img class="card-img-top"
-                        data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Student id {{ student.id }}">
+                         data-src="holder.js/100px225?theme=thumb&bg=55595c&fg=eceeef&text=Student id {{ student.id }}">
                     <div class="card-body">
                         <p class="card-text">
                             {{ student.name }}
                             {{ student.surname }}
                             {% if student.social_url %}
-                                {{ student.social_url }}
+                            {{ student.social_url }}
                             {% endif %}
                         </p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                <a type="button" class="btn btn-sm btn-outline-secondary" href="{% url 'homepage:edit_student' id=student.id %}">Edit</a>                            </div>
+                                <a type="button" class="btn btn-sm btn-outline-secondary"
+                                   href="{% url 'homepage:edit_student' id=student.id %}">Edit</a></div>
                             <small class="text-muted">9 mins</small>
                         </div>
                     </div>

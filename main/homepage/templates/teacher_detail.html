@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+
+{% block body %}
+<div class="album py-5 bg-light">
+    <div class='container'>
+        <div class="container">
+            <div class="row">
+                <div>
+                    {{ teacher_id }}
+                    {{ teacher.name }}
+
+                </div>
+
+                <p>Teachers students:</p>
+
+                {% for students in teachers_students %}
+                <ol> {{students.name}} {{students.surname}}</ol>
+                {% endfor %}
+
+                <div class="form-control-sm">
+                    <form action="{% url 'homepage:edit_teachers_name' id=teacher_id %}" method="POST">
+                        {% csrf_token %}
+                        <p>
+                            {{ teacher_form }}
+                        </p>
+                        <p><input type="submit" value="Edit"></p>
+                    </form>
+                </div>
+                <div class="form-control-sm">
+                    <form action="{% url 'homepage:add_student' id=teacher_id %}" method="POST">
+                        {% csrf_token %}
+                        <p>
+                            Add students to {{ teacher.name }}<br>
+                            <select name="add">
+                                {% for student in new_students %}
+                                <option selected value="{{student.id}}">{{student.name}} {{student.surname}}</option>
+                                {% endfor %}
+                            </select>
+                        </p>
+                        <p><input type="submit" value="Add"></p>
+                    </form>
+                </div>
+                <div class="form-control-sm">
+                    <form action="{% url 'homepage:delete_teacher' id=teacher_id %}" method="POST">
+                        {% csrf_token %}
+                        Delete student from the {{ teacher.name }} <br>
+                        <p><select name="delete">
+                            {% for student in teachers_students %}
+                            <option selected value="{{student.id}}">{{student.name}} {{student.surname}}</option>
+                            {% endfor %}
+                        </select></p>
+                        <p><input type="submit" value="Delete"></p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
