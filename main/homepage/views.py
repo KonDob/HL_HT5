@@ -1,5 +1,9 @@
 import csv
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.http import HttpResponse, JsonResponse
 from django.core.cache import cache
 from django.shortcuts import redirect, render
@@ -7,13 +11,94 @@ from django.shortcuts import redirect, render
 from django.views.generic import DetailView
 from django.views.generic.base import View
 from django.views.generic.list import ListView
-from django.views.generic.edit import * # noqa
+from django.views.generic.edit import *  # noqa
 from django.utils.decorators import method_decorator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.cache import cache_page
 from django.conf import settings
 
-from .forms import StudentForm, BookForm, SubjectForm, TeacherForm
+from .forms import StudentForm, BookForm, SubjectForm, \
+    TeacherForm, UserSignUpForm
 from .models import Student, Book, Subject, Teacher
+from .send_email import send_email
+
+
+class SignUpView(View):
+
+    def get(self, request):
+        sign_up_form = UserSignUpForm()
+        return render(request, 'sign_up.html', context={
+            'form': sign_up_form
+        })
+
+    def post(self, request):
+        sign_up_form = UserSignUpForm(request.POST)
+        if sign_up_form.is_valid():
+            user = sign_up_form.save()
+            user.set_password(request.POST['password1'])
+            user.is_active = False
+            user.save()
+
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            activate_url = "{}/{}/{}".format(
+                "http://localhost:8000/activate",
+                uid,
+                default_token_generator.make_token(user=user)
+            )
+            send_email(recipient_list=[user.email],
+                       activate_url=activate_url)
+
+            return HttpResponse("Check your email list to activate account!")
+        return HttpResponse("wrong data")
+
+
+class SignInView(View):
+
+    def get(self, request):
+        if not request.user.is_authenticated:
+            auth_form = AuthenticationForm()
+            return render(request, 'sign_in.html',
+                          context={
+                              'form': auth_form
+                          })
+        else:
+            return HttpResponse('User already logined')
+
+    def post(self, request):
+        user = authenticate(request=request,
+                            username=request.POST.get('username'),
+                            password=request.POST.get('password'))
+        if user:
+            login(request, user)
+            return redirect('homepage:students_list')
+        else:
+            return HttpResponse('Wrong data to login')
+
+
+class SignOutView(View):
+
+    def get(self, request):
+        logout(request)
+
+        return redirect('homepage:students_list')
+
+
+class ActivateView(View):
+
+    def get(self, request, uid, token):
+
+        user_id = force_bytes(urlsafe_base64_decode(uid))
+        user = User.objects.get(pk=user_id)
+
+        if not user.is_active and default_token_generator.check_token(user,
+                                                                      token):
+            user.is_active = True
+            user.save()
+            login(request, user)
+            return HttpResponse("Token checked")
+        else:
+            return HttpResponse("Your account activated")
 
 
 class HomePageView(View):
@@ -225,7 +310,6 @@ class TeachersView(ListView):
 
 
 class TeacherDetailView(View):
-
     template_name = 'teacher_detail.html'
 
     def get(self, request, id):
