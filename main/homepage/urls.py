@@ -36,7 +36,6 @@ urlpatterns = [
          name='add_student'),
     path('teacher/<id>', views.TeacherDetailView.as_view(),
          name='edit_teachers_name'),
-    
     path('json_students_list', views.JsonStudentView.as_view(),
          name='json_students_list'),
     path('csv_students_list', views.CSVStudentView.as_view(),
@@ -44,5 +43,6 @@ urlpatterns = [
     path('sign_up', SignUpView.as_view(), name='sign_up_view'),
     path('sign_out', SignOutView.as_view(), name='sign_out_view'),
     path('login', SignInView.as_view(), name='login'),
-    path('activate/<uid>/<token>', ActivateView.as_view(), name='sign_up_view'),
+    path('activate/<uid>/<token>', ActivateView.as_view(),
+         name='sign_up_view'),
 ]

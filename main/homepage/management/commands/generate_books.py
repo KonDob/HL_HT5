@@ -1,9 +1,7 @@
-from random import randint
-
 from django.core.management.base import BaseCommand
 from faker import Faker
 
-from homepage.models import Student, Subject, Book
+from homepage.models import Student, Book
 
 
 class Command(BaseCommand):

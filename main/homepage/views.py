@@ -11,17 +11,16 @@ from django.shortcuts import redirect, render
 from django.views.generic import DetailView
 from django.views.generic.base import View
 from django.views.generic.list import ListView
-from django.views.generic.edit import * # noqa
+from django.views.generic.edit import *  # noqa
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.decorators.cache import cache_page
 from django.conf import settings
 
-from .forms import StudentForm, BookForm, SubjectForm, TeacherForm
+from .forms import StudentForm, BookForm, SubjectForm, \
+    TeacherForm, UserSignUpForm
 from .models import Student, Book, Subject, Teacher
-from .forms import StudentForm, UserSignUpForm
-from .models import Student
 from .send_email import send_email
 
 
@@ -92,7 +91,8 @@ class ActivateView(View):
         user_id = force_bytes(urlsafe_base64_decode(uid))
         user = User.objects.get(pk=user_id)
 
-        if not user.is_active and default_token_generator.check_token(user, token):
+        if not user.is_active and default_token_generator.check_token(user,
+                                                                      token):
             user.is_active = True
             user.save()
             login(request, user)
@@ -310,7 +310,6 @@ class TeachersView(ListView):
 
 
 class TeacherDetailView(View):
-
     template_name = 'teacher_detail.html'
 
     def get(self, request, id):
